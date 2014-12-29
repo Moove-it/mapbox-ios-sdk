@@ -161,6 +161,11 @@ typedef enum : short {
 /** The list of caches managed by a cache manager. This could include memory-based, disk-based, or other types of caches. */
 @property (nonatomic, readonly, strong) NSArray *tileCaches;
 
+/**
+ *  The prefered tileCache to store images. If nil it will use the first of _tileCaches.
+ */
+@property (nonatomic, strong          ) id <RMTileCache> preferedTileCache;
+
 - (void)didReceiveMemoryWarning;
 
 /** @name Background Downloading */
