@@ -156,6 +156,13 @@
     });
 }
 
+- (void)removeCache:(id<RMTileCache>)cache
+{
+    dispatch_barrier_async(_tileCacheQueue, ^{
+        [_tileCaches removeObject:cache];
+    });
+}
+
 - (NSArray *)tileCaches
 {
     return [NSArray arrayWithArray:_tileCaches];
