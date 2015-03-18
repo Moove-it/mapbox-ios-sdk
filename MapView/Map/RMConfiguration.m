@@ -29,6 +29,23 @@
 
 static RMConfiguration *RMConfigurationSharedInstance = nil;
 
+NSData *sendRequest(NSURLRequest *request, NSURLResponse **response, NSError **error)
+{
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  __block NSData *newData = nil;
+
+  [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    newData = data;
+    error = error;
+
+    dispatch_semaphore_signal(semaphore);
+  }] resume];
+
+  dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
+  return newData;
+}
+
 @implementation NSURLConnection (RMUserAgent)
 
 + (NSData *)sendBrandedSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error
@@ -39,7 +56,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
     [newRequest setValue:[[RMConfiguration sharedInstance] userAgent] forHTTPHeaderField:@"User-Agent"];
 
-    return [NSURLConnection sendSynchronousRequest:newRequest returningResponse:response error:error];
+    return sendRequest(newRequest, response, error);
 }
 
 @end
@@ -54,7 +71,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
     [request setValue:[[RMConfiguration sharedInstance] userAgent] forHTTPHeaderField:@"User-Agent"];
 
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    return sendRequest(request, nil, nil);
 }
 
 @end
@@ -69,7 +86,7 @@ static RMConfiguration *RMConfigurationSharedInstance = nil;
 
     [request setValue:[[RMConfiguration sharedInstance] userAgent] forHTTPHeaderField:@"User-Agent"];
 
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:error];
+    NSData *returnData = sendRequest(request, nil, error);
 
     if ( ! returnData)
         return nil;
