@@ -238,6 +238,13 @@
 
     dispatch_sync(_tileCacheQueue, ^{
 
+        if (_preferedTileCache) {
+            if ([_preferedTileCache respondsToSelector:@selector(addImage:forTile:withCacheKey:)]) {
+                [_preferedTileCache addDiskCachedImageData:data forTile:tile withCacheKey:aCacheKey];
+                return;
+            }
+        }
+
         for (id <RMTileCache> cache in _tileCaches)
         {
             if ([cache respondsToSelector:@selector(addDiskCachedImageData:forTile:withCacheKey:)])
