@@ -232,7 +232,7 @@
         [self addAnimation:positionAnimation forKey:@"animatePosition"];
     }
 
-    super.position = newPosition;
+    self.position = newPosition;
 
     // bounds are animated non-clipped but set with clipping
 
@@ -599,12 +599,21 @@
     shapeLayer.lineDashPhase = dashPhase;
 }
 
+- (void)setPosition:(CGPoint)newPosition
+{
+    if (!isnan(newPosition.x) && !isnan(newPosition.y)) {
+        [super setPosition:newPosition];
+    }
+}
+
 - (void)setPosition:(CGPoint)newPosition animated:(BOOL)animated
 {
-    if (CGPointEqualToPoint(newPosition, super.position) && CGRectEqualToRect(self.bounds, previousBounds))
-        return;
+    if (!isnan(newPosition.x) && !isnan(newPosition.y)) {
+        if (CGPointEqualToPoint(newPosition, super.position) && CGRectEqualToRect(self.bounds, previousBounds))
+            return;
 
-    [self recalculateGeometryAnimated:animated];
+        [self recalculateGeometryAnimated:animated];
+    }
 }
 
 - (void)setAnnotation:(RMAnnotation *)newAnnotation
