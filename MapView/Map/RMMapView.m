@@ -1302,12 +1302,6 @@
 
     [_overlayView removeFromSuperview];  _overlayView = nil;
 
-    for (__strong RMMapTiledLayerView *tiledLayerView in _tiledLayersSuperview.subviews)
-    {
-        tiledLayerView.layer.contents = nil;
-        [tiledLayerView removeFromSuperview];  tiledLayerView = nil;
-    }
-
     [_tiledLayersSuperview removeFromSuperview];  _tiledLayersSuperview = nil;
 
     [_mapScrollView removeObserver:self forKeyPath:@"contentOffset"];

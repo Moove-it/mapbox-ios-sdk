@@ -170,27 +170,18 @@
 
                 if ( ! tileImage)
                 {
-                    // fire off an asynchronous retrieval
-                    //
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+                    [(RMAbstractWebMapSource *)_tileSource URLsForTile:RMTileMake(x, y, zoom)];
+
+                    // this will return quicker if cached since above attempt, else block on fetch
+                    if (_tileSource.isCacheable && [_tileSource imageForTile:RMTileMake(x, y, zoom) inCache:[_mapView tileCache]])
                     {
-                        // ensure only one request for a URL at a time
-                        //
-                        @synchronized ([(RMAbstractWebMapSource *)_tileSource URLsForTile:RMTileMake(x, y, zoom)])
+                        __weak typeof(self) weakSelf = self;
+                        dispatch_async(dispatch_get_main_queue(), ^(void)
                         {
-                            // this will return quicker if cached since above attempt, else block on fetch
-                            //
-                            if (_tileSource.isCacheable && [_tileSource imageForTile:RMTileMake(x, y, zoom) inCache:[_mapView tileCache]])
-                            {
-                                dispatch_async(dispatch_get_main_queue(), ^(void)
-                                {
-                                    // do it all again for this tile, next time synchronously from cache
-                                    //
-                                    [self.layer setNeedsDisplayInRect:rect];
-                                });
-                            }
-                        }
-                    });
+                            // do it all again for this tile, next time synchronously from cache
+                            [weakSelf.layer setNeedsDisplayInRect:rect];
+                        });
+                    }
                 }
             }
         }
