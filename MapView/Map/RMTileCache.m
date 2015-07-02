@@ -653,4 +653,11 @@ static NSMutableDictionary *predicateValues = nil;
     return dbCache;
 }
 
+- (void)includeDatabaseCachesInBackup:(BOOL)include
+{
+    for (id <RMTileCache> cache in _tileCaches)
+        if ([cache isKindOfClass:[RMDatabaseCache class]])
+            [(RMDatabaseCache*)cache includeInBackup:include];
+}
+
 @end

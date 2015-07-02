@@ -198,4 +198,8 @@ typedef enum : short {
 *   @return The number of tiles representing the coverage area. */
 - (NSUInteger)tileCountForSouthWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast minZoom:(NSUInteger)minZoom maxZoom:(NSUInteger)maxZoom;
 
+/** Tells a tile cache whether or not to include database cache file(s) in iCloud backups. (The default when a tile cache is initiailized is to not backup.)
+*   @param include Boolean value indicating whether or not to include the database cache file(s) in iCloud backups. */
+- (void)includeDatabaseCachesInBackup:(BOOL)include;
+
 @end
