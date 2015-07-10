@@ -3249,6 +3249,21 @@
     [self correctPositionOfAllAnnotations];
 }
 
+- (void)removeAnnotation:(RMAnnotation *)annotation updatePositions:(BOOL)updatePositions
+{
+  @synchronized (_annotations)
+  {
+      [_annotations removeObject:annotation];
+      [_visibleAnnotations removeObject:annotation];
+      [self.quadTree removeAnnotation:annotation];
+      annotation.layer = nil;
+  }
+
+  if (updatePositions) {
+      [self correctPositionOfAllAnnotations];
+  }
+}
+
 - (void)removeAnnotations:(NSArray *)annotationsToRemove
 {
     @synchronized (_annotations)

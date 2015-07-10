@@ -321,6 +321,11 @@ typedef enum : NSUInteger {
 *   @param annotation The annotation to remove. */
 - (void)removeAnnotation:(RMAnnotation *)annotation;
 
+/** Remove an annotation from the map.
+ *   @param annotation The annotation to remove.
+ *   @param updatePositions Indicates if the map will updates all the annotations positions. */
+- (void)removeAnnotation:(RMAnnotation *)annotation updatePositions:(BOOL)updatePositions;
+
 /** Remove one or more annotations from the map. 
 *   @param annotations An array containing the annotations to remove from the map. */
 - (void)removeAnnotations:(NSArray *)annotations;
