@@ -212,8 +212,6 @@
     else if (_tileSideLength != [tileSource tileSideLength])
     {
         NSLog(@"The tilesource '%@' has a different tile side length than the tilesource container", [tileSource shortName]);
-        [_tileSourcesLock unlock];
-        return NO;
     }
 
     RMSphericalTrapezium newLatitudeLongitudeBoundingBox = [tileSource latitudeLongitudeBoundingBox];
