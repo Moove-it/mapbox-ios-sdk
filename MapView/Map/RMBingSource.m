@@ -32,7 +32,6 @@
 @implementation RMBingSource
 {
     NSString *_mapsKey;
-    NSString *_imageURLString;
     NSString *_uniqueTilecacheKey;
     RMBingImagerySet _imagerySet;
 }
@@ -63,7 +62,9 @@
 
 - (NSURL *)URLForTile:(RMTile)tile
 {
-    if ( ! _imageURLString)
+    NSString *imageURLString;
+
+    if (!imageURLString)
     {
         NSString *imagerySetString = nil;
 
@@ -87,15 +88,15 @@
         {
             NSDictionary *resources = [[[[(NSDictionary *)metadata objectForKey:@"resourceSets"] objectAtIndex:0] objectForKey:@"resources"] objectAtIndex:0];
 
-            _imageURLString = [[[resources objectForKey:@"imageUrl"] stringByReplacingOccurrencesOfString:@"{subdomain}"
+            imageURLString = [[[resources objectForKey:@"imageUrl"] stringByReplacingOccurrencesOfString:@"{subdomain}"
                                                                                                withString:[[resources objectForKey:@"imageUrlSubdomains"] objectAtIndex:0]] copy];
         }
     }
 
-    if ( ! _imageURLString)
+    if (!imageURLString)
         return nil;
 
-    NSMutableString *tileURLString = [NSMutableString stringWithString:_imageURLString];
+    NSMutableString *tileURLString = [NSMutableString stringWithString:imageURLString];
 
     [tileURLString replaceOccurrencesOfString:@"{culture}" withString:@"en" options:0 range:NSMakeRange(0, [tileURLString length])];
 
