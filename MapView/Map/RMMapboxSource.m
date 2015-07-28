@@ -191,7 +191,7 @@
     NSString *accessToken = @"";
 
     if ([[RMConfiguration sharedInstance] accessToken]) {
-        accessToken = [@"&access_token=%@" stringByAppendingString:[[RMConfiguration sharedInstance] accessToken]];
+        accessToken = [@"&access_token=" stringByAppendingString:[[RMConfiguration sharedInstance] accessToken]];
     }
 
     return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.tiles.mapbox.com/v4/%@.json?secure%@", mapID, accessToken]];
