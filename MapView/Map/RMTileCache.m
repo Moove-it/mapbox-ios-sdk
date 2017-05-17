@@ -554,7 +554,7 @@ static NSMutableDictionary *predicateValues = nil;
     BOOL useCacheDir = NO;
     RMCachePurgeStrategy strategy = RMCachePurgeStrategyFIFO;
 
-    NSUInteger capacity = 1000;
+    NSUInteger capacity = NSUIntegerMax;
     NSUInteger minimalPurge = capacity / 10;
 
     // Defaults
